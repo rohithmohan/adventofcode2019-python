@@ -1,2 +1,2 @@
 # adventofcode2019-python
-My solutions to advent of code 2019 in python
+This repo contains my solutions to [Advent Of Code 2019](https://adventofcode.com/) as I work through them.
