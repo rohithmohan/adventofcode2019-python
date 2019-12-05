@@ -10,7 +10,7 @@ with open("input.txt", 'r') as input_file:
 # split on commas and convert to ints
 opcodeList = data.split(',')
 opcodeList = [int(x) for x in opcodeList]
-
+opcodeListPartI = opcodeList.copy()
 
 # define function for evaluating opcode
 # use while loop so that it's possible to skip around iterator
@@ -47,11 +47,23 @@ def testsPart1():
 print(testsPart1())
 
 # Return data to state prior to alarm
-opcodeList[1] = 12
-opcodeList[2] = 2
+opcodeListPartI[1] = 12
+opcodeListPartI[2] = 2
 
-print("Part One : " + str(evaluateCode(opcodeList)[0]))
+print("Part One : " + str(evaluateCode(opcodeListPartI)[0]))
 # Answer for Part One : 3931283
 
-print("Part Two : " + str())
+
+for noun in range(1, 100):
+    for verb in range(1, 100):
+        opcodeListPartII = opcodeList.copy()
+        opcodeListPartII[1] = noun
+        opcodeListPartII[2] = verb
+        if evaluateCode(opcodeListPartII)[0] == 19690720:
+            print("Part Two : " + str(100 * noun + verb))
+            break
+    else:
+        continue  # to continue when inner loop doesn't break
+    break  # to break when inner loop breaks
+
 # Answer for Part Two :
