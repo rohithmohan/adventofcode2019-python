@@ -1,6 +1,6 @@
-# Advent of Code 2019 - Day 2 solution
+# Advent of Code 2019 - Day 3 solution
 # Author = Rohith Mohan
-# Date = December 04 2019
+# Date = December 05 2019
 
 
 def calcWireCoordsPartI(x):
