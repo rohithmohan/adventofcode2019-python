@@ -117,7 +117,7 @@ inputs = None
 testcount = 0
 try:
     while True:
-        outputs.append(computer.evaluateCode(1))
+        outputs.append(computer.evaluateCode(2))
         inputs = None
 except EndProgram:
     print("outputs:", outputs)
@@ -125,4 +125,4 @@ except EndProgram:
 
 
 
-# Answer for Part Two : 2369720
+# Answer for Part Two : 59095
