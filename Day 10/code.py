@@ -1,8 +1,9 @@
 # Advent of Code 2019 - Day 10 solution
 # Author = Rohith Mohan
-# Date = December 16 2019
+# Date = December 17 2019
 
 import math
+from collections import defaultdict, OrderedDict
 
 with open("input.txt", 'r') as input_file:
     data = input_file.read()
@@ -29,7 +30,7 @@ def stationLocationFinder(asteroidCoords):
 
 
 def getVisibleAsteroids(stationPotentialLocation, asteroidCoords):
-    visibleAsteroids = []
+    visibleAsteroids = {}
 
     for targetCoords in asteroidCoords:
         # print("targetCoords =", targetCoords)
@@ -43,10 +44,56 @@ def getVisibleAsteroids(stationPotentialLocation, asteroidCoords):
         dx = dx / gcdVal
         dy = dy / gcdVal
 
-        # print("targetCoords =", targetCoords, "dx=", dx, "dy=", dy)
-        visibleAsteroids.append((dx, dy))
+        if (dx, dy) not in visibleAsteroids:
+            visibleAsteroids[(dx, dy)] = targetCoords
 
-    return list(set(visibleAsteroids))
+    return visibleAsteroids
+
+
+def getLaserVaporizations(station, asteroidCoords):
+    asteroidsToBeVaporized = defaultdict(list)
+
+    for targetCoords in asteroidCoords:
+        # print("targetCoords =", targetCoords)
+        if station == targetCoords:
+            continue
+
+        dx = station[0] - targetCoords[0]
+        dy = station[1] - targetCoords[1]
+
+        gcdVal = math.gcd(dx, dy)
+        dx = dx / gcdVal
+        dy = dy / gcdVal
+
+        # Set top to 0 degrees / pi/2 radians
+        radianToBeStored = math.atan2(dy, dx) - math.radians(90)
+        # Get rid of negative radians by adding by 2pi and then getting
+        # remainder after dividing by 2pi
+        radianToBeStored = (math.radians(360) +
+                            radianToBeStored) % math.radians(360)
+
+        asteroidsToBeVaporized[radianToBeStored].append(targetCoords)
+
+    for concurrentAsteroids in asteroidsToBeVaporized.values():
+        concurrentAsteroids.sort(key=lambda aster: abs(aster[0] - station[0]) +
+                                 abs(aster[1] - station[1]),
+                                 reverse=True)
+
+    asteroidsToBeVaporizedSorted = OrderedDict(
+        sorted(asteroidsToBeVaporized.items()))
+    resultsCoords = []
+
+    while asteroidsToBeVaporizedSorted:
+        # Had to make copy through list otherwise orderdeddict has mutate error
+        radianKeys = list(asteroidsToBeVaporizedSorted.keys())
+        for radianKey in radianKeys:
+            if asteroidsToBeVaporizedSorted[radianKey]:
+                resultsCoords.append(
+                    asteroidsToBeVaporizedSorted[radianKey].pop())
+            else:
+                del asteroidsToBeVaporizedSorted[radianKey]
+
+    return resultsCoords
 
 
 # print("The gcd of -15 and -10 is : ", math.gcd(-15, -10))
@@ -78,8 +125,17 @@ assert stationLocationFinder(example5)[1] == 210
 
 partI = evaluateAsteroidCoords(data)
 print(stationLocationFinder(partI))
-# Answer for Part One : 326
+# Answer for Part One : 326, coords (22, 28)
 
 # Part 2
 
-# Answer for Part Two :
+example6_Input = ".#....#####...#..\n##...##.#####..##\n##...#...#.#####.\n..#.....X...###..\n..#.#.....#....##"
+example6 = evaluateAsteroidCoords(example6_Input)
+
+# results = getVisibleAsteroids((8, 3), example6)
+# print(results.values())
+# print(results[(7.0, 3.0)])
+# getLaserVaporizations((8, 3),example6)
+# print(getLaserVaporizations((11, 13),example5)[199]) # ((8,2))
+print(getLaserVaporizations((22, 28), partI)[199])  # (16,23)
+# Answer for Part Two :1623
