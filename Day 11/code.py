@@ -1,6 +1,8 @@
 # Advent of Code 2019 - Day 11 solution
 # Author = Rohith Mohan
 # Date = December 17 2019
+# Joel Grus' live code sessions were helpful for interpreting the problem
+
 from collections import defaultdict
 with open("input.txt", 'r') as input_file:
     data = input_file.read()
