@@ -170,7 +170,8 @@ panelGrid = defaultdict(int)
 paintedPanels = set()
 
 panelGridCoord = (0, 0)
-panelGrid[panelGridCoord] = 0
+# panelGrid[panelGridCoord] = 0
+panelGrid[panelGridCoord] = 1
 
 currentDirection = 0
 stepsTaken = 0
@@ -198,4 +199,20 @@ except EndProgram:
 
 # Part 2
 
-# Answer for Part Two :
+drawTop, drawRight = -999999, -999999
+drawBottom, drawLeft = 999999, 999999
+for coordVal, colorVal in panelGrid.items():
+    if colorVal == 1:
+        drawTop = max(drawTop, coordVal[1])
+        drawRight = max(drawRight, coordVal[0])
+        drawBottom = min(drawBottom, coordVal[1])
+        drawLeft = min(drawLeft, coordVal[0])
+
+for col in range(drawTop, drawBottom - 1, -1):
+    for row in range(drawLeft, drawRight + 1):
+        if panelGrid[(row, col)] == 1:
+            print("*", end="")
+        if panelGrid[(row, col)] == 0:
+            print(" ", end="")
+    print("")
+# Answer for Part Two : KLCZAEGU
